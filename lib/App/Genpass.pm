@@ -3,34 +3,43 @@ package App::Genpass;
 use Carp;
 use Moose;
 use List::AllUtils qw( any none shuffle );
+use namespace::autoclean;
+
+with qw/ MooseX::SimpleConfig MooseX::Getopt /;
 
 # attributes for password generation
 has 'lowercase' => (
-    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ 'a'..'z' ] }
+    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ 'a'..'z' ] },
 );
 
 has 'uppercase' => (
-    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ 'A'..'Z' ] }
+    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ 'A'..'Z' ] },
 );
 
 has 'numerical' => (
-    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ 0 .. 9 ] }
+    is => 'rw', isa => 'ArrayRef[Str]', default => sub { [ '0' .. '9' ] },
 );
 
 has 'unreadable' => (
     is      => 'ro',
     isa     => 'ArrayRef[Str]',
-    default => sub { [ split //, q{oO0l1I} ] },
+    default => sub { [ split //sm, q{oO0l1I} ] },
 );
+
+## no critic (RequireInterpolationOfMetachars)
 
 has 'specials' => (
     is      => 'ro',
     isa     => 'ArrayRef[Str]',
-    default => sub { [ split //, q{!@#$%^&*()} ] },
+    default => sub { [ split //sm, q{!@#$%^&*()} ] },
 );
 
+has 'repeat' => ( is => 'ro', isa => 'Int', default => 1 );
+
+## use critic
+
 has [ qw( readable special verify ) ] => (
-    is => 'ro', isa => 'Bool', default => 1
+    is => 'ro', isa => 'Bool', default => 1,
 );
 
 has [ qw( length ) ] => ( is => 'ro', isa => 'Int', default => 10 );
@@ -38,7 +47,7 @@ has [ qw( length ) ] => ( is => 'ro', isa => 'Int', default => 10 );
 # attributes for the program
 has 'configfile' => ( is => 'ro', isa => 'Str' );
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 sub _get_chars {
     my $self      = shift;
@@ -95,7 +104,7 @@ You requested $num_of_types types of characters but only have $length length.
 _DIE_MSG
     }
 
-    $repeat ||= 1;
+    $repeat ||= $self->repeat;
 
     # each password iteration needed
     foreach my $pass_iter ( 1 .. $repeat ) {
@@ -115,7 +124,8 @@ _DIE_MSG
                     $char = $chars[ int rand @chars ];
                 }
 
-                $char_type = scalar @char_types > 0 ? shift @char_types : '';
+                $char_type =
+                    scalar @char_types > 0 ? shift @char_types : $EMPTY;
             }
 
             $password .= $char;
@@ -124,7 +134,7 @@ _DIE_MSG
         # since the verification process creates a situation of ordered types
         # (lowercase, uppercase, numerical, special)
         # we need to shuffle the string
-        $password = join '', shuffle( split //, $password );
+        $password = join $EMPTY, shuffle( split //sm, $password );
 
         $repeat == 1 && return $password;
 
@@ -136,9 +146,14 @@ _DIE_MSG
     return wantarray ? @passwords : \@passwords;
 }
 
+__PACKAGE__->meta->make_immutable;
+no Moose;
+
 1;
 
 __END__
+
+=for stopwords boolean DWIM DWYM arrayref perldoc Github CPAN's AnnoCPAN CPAN
 
 =head1 NAME
 
@@ -146,7 +161,7 @@ App::Genpass - Quickly create secure passwords
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =head1 SYNOPSIS
 
@@ -188,11 +203,20 @@ These are boolean flags which change the way App::Genpass works.
 
 =over 4
 
+=item repeat
+
+You can decide how many passwords to create. The default is 1.
+
+This can be overridden per I<generate> so you can have a default of 30 but in a
+specific case only generate 2, if that's what you want.
+
 =item readable
 
-Use only readable characters, excluding confusing characters: "o", "O", "0", "l", "1", "I".
+Use only readable characters, excluding confusing characters: "o", "O", "0",
+"l", "1", "I".
 
-You can overwrite what characters are considered unreadable under "character attributes" below.
+You can overwrite what characters are considered unreadable under "character
+attributes" below.
 
 Default: on.
 
@@ -204,7 +228,9 @@ Default: on.
 
 =item verify
 
-Verify that every type of character wanted (lowercase, uppercase, numerical, specials, etc.) are present in the password. This makes it just a tad slower, but it guarantees the result. Best keep it on.
+Verify that every type of character wanted (lowercase, uppercase, numerical,
+specials, etc.) are present in the password. This makes it just a tad slower,
+but it guarantees the result. Best keep it on.
 
 Default: on.
 
@@ -224,7 +250,9 @@ Default: 10.
 
 =head3 character attributes
 
-These are the attributes that control the types of characters. One can change which lowercase characters will be used or whether they will be used at all, for example.
+These are the attributes that control the types of characters. One can change
+which lowercase characters will be used or whether they will be used at all,
+for example.
 
     # only a,b,c,d,e,g will be consdered lowercase and no uppercase at all
     my $gp = App::Genpass->new( lowercase => [ 'a' .. 'g' ], uppercase => [] );
@@ -233,31 +261,38 @@ These are the attributes that control the types of characters. One can change wh
 
 =item lowercase
 
-All lowercase characters, excluding those that are considered unreadable if the readable flag (described above) is turned on.
+All lowercase characters, excluding those that are considered unreadable if the
+readable flag (described above) is turned on.
 
 Default: [ 'a' .. 'z' ] (not including excluded chars).
 
 =item uppercase
 
-All uppercase characters, excluding those that are considered unreadable if the readable flag (described above) is turned on.
+All uppercase characters, excluding those that are considered unreadable if the
+readable flag (described above) is turned on.
 
 Default: [ 'A' .. 'Z' ] (not including excluded chars).
 
 =item numerical
 
-All numerical characters, excluding those that are considered unreadable if the readable flag (described above) is turned on.
+All numerical characters, excluding those that are considered unreadable if the
+readable flag (described above) is turned on.
 
 Default: [ '0' .. '9' ] (not including excluded chars).
 
 =item unreadable
 
-All characters which are considered (to me) unreadable. You can change this to what you consider unreadable characters. For example:
+All characters which are considered (to me) unreadable. You can change this to
+what you consider unreadable characters. For example:
 
     my $gp = App::Genpass->new( unreadable => [ qw(jlvV) ] );
 
-After all the characters are set, unreadable characters will be removed from all sets.
+After all the characters are set, unreadable characters will be removed from all
+sets.
 
-Thus, unreadable characters override all other sets. You can make unreadable characters not count by using the <code>readable => 0</code> option, described by the I<readable> flag above.
+Thus, unreadable characters override all other sets. You can make unreadable
+characters not count by using the C<readable =&gt; 0> option, described by the
+I<readable> flag above.
 
 =item specials
 
@@ -278,21 +313,33 @@ It accepts only one parameter, which is how many passwords to generate.
     $gp = App::Genpass->new();
     my @passwords = $gp->generate(300); # 300 passwords to go
 
-This method tries to be tricky and DWIM (or rather, DWYM). That is, if you request it to generate only one password and use a scalar (<code>my $p = $gp->generate(1)</code>), it will return a single password.
+This method tries to be tricky and DWIM (or rather, DWYM). That is, if you
+request it to generate only one password and use a scalar
+(C<my $p = $gp-&gt;generate(1)>), it will return a single password.
 
-However, if you try to generate multiple passwords and use a scalar (<code>my $p = $gp->generate(30)</code>), it will return an arrayref for the passwords.
+However, if you try to generate multiple passwords and use a scalar
+(C<my $p = $gp-&gt;generate(30)>), it will return an arrayref for the passwords.
 
-Generating passwords with arrays (<code>my @p = $gp->generate(...)</code>) will always return an array of the passwords, even if it's a single password.
+Generating passwords with arrays (C<my @p = $gp-&gt;generate(...)>) will always
+return an array of the passwords, even if it's a single password.
 
 =head1 AUTHOR
 
 Sawyer X, C<< <xsawyerx at cpan.org> >>
 
+=head1 DEPENDENCIES
+
+L<Moose>
+
+L<List::AllUtils>
+
 =head1 BUGS AND LIMITATIONS
 
-Please report any bugs or feature requests to C<bug-app-genpass at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-Genpass>.
-I will be notified, and then you'll automatically be notified of progress on your bug as I make changes.
+Please report any bugs or feature requests to C<bug-app-genpass at rt.cpan.org>,
+or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=App-Genpass>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
 
 =head1 SUPPORT
 
@@ -329,7 +376,7 @@ L<http://search.cpan.org/dist/App-Genpass/>
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2009 Sawyer X.
+Copyright 2009-2010 Sawyer X.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

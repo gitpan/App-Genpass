@@ -1,0 +1,13 @@
+#!perl
+
+use strict;
+use warnings;
+
+use App::Genpass;
+
+my $app       = App::Genpass->new_with_options;
+my @passwords = $app->generate();
+
+print "$_\n" for @passwords;
+
+exit 0;
