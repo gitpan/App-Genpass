@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 0.11
+    version 1.00
 
 SYNOPSIS
         use App::Genpass;
@@ -37,7 +37,7 @@ SUBROUTINES/METHODS
    flags
     These are boolean flags which change the way App::Genpass works.
 
-    repeat
+    number
         You can decide how many passwords to create. The default is 1.
 
         This can be overridden per *generate* so you can have a default of

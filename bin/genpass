@@ -26,17 +26,17 @@ genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 0.11
+version 1.00
 
 =head1 SYNOPSIS
 
-genpass [-elrsv] [long options...]
+genpass [-rlnsv] [long options...]
 
  Options:
           --configfile      configuration file to read (YAML, JSON, INI, etc.)
-    -e    --readable        create readable passwords
+    -r    --readable        create readable passwords
     -l    --length          password length
-    -r    --repeat          how many passwords to create
+    -n    --number          how many passwords to create
     -s    --special         use special characters (clashes with readable opt)
     -v    --verify          verify types of characters
           --lowercase       what lowercase characters to use
@@ -54,8 +54,9 @@ able to do plenty without necessarily needing to.
 
 The way B<genpass> works is by compiling a list of known characters by types
 (numerical, lowercase, uppercase, etc.) and a list of unreadable characters -
-which are basically characters that can be confused with each other (0OIl1),
-etc.
+which are basically characters that can be confused with each other (0, O, I, l,
+1 and so on). It generates a random by possible characters, excluding the
+non-readable ones, if any exist.
 
 B<genpass> allows you to pick which characters it will use to create the
 passwords via the longer options for I<lowercase>, I<uppercase>,
@@ -63,6 +64,15 @@ I<numerical>, I<specials> and I<unreadable>.
 
 Also, any boolean option (readable, special) can be negated using "no", such as
 I<genpass --nospecial> which negates I<genpass --special>.
+
+B<genpass> also supports configuration files, so you don't have to remember all
+your favorite options and insert them each time. First it tries to read a
+C<.genpass.yaml> in your home folder (works with Linux, BSD, MacOS, Windows and
+anything L<File::HomeDir> supports) and if that doesn't exist (or is simply
+unreadable), it looks for a global Unix-style conf named C</etc/genpass.yaml>.
+
+You will read below how you can specifically ask to read a completely different
+file instead of the default ones mentioned above.
 
 Read below for more options and examples.
 
@@ -82,9 +92,9 @@ Or a global one as such:
 
     genpass --configfile /etc/genpass.json
 
-Default: I</etc/genpass.yaml>.
+Default: I<YourHomeFolder/.genpass.yaml>, then I</etc/genpass.yaml>.
 
-=item B<-e | --readable>
+=item B<-r | --readable>
 
 A flag to decide whether passwords should be readable. The purpose of
 readability is to create passwords you can give to users or read to someone -
@@ -128,13 +138,12 @@ complain and try to explain what the problem is.
 
 Default: 10.
 
-=item B<-r | --repeat>
+=item B<-n | --number>
 
-How many passwords to create. The word repeat comes from how many times to
-repeat the generation process.
+How many passwords to create.
 
     # generate 30 passwords
-    genpass -r 30
+    genpass -n 30
 
 Default: 1.
 
@@ -198,10 +207,10 @@ sequences are stripped of such characters.
     genpass -l 10
 
     # create 30 passwords using all possible characters
-    genpass -r 30 --noreadable
+    genpass -n 30 --noreadable
 
     # create 5 new passwords of length of 30, long options
-    genpass --repeat 5 --length 30
+    genpass --number 5 --length 30
 
 =head1 AUTHOR
 

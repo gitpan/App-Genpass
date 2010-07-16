@@ -1,6 +1,6 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '0.11';
+  $App::Genpass::VERSION = '1.00';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -42,12 +42,12 @@ has 'specials' => (
 
 ## use critic
 
-has 'repeat' => (
+has 'number' => (
     is          => 'ro',
     isa         => 'Int',
     default     => 1,
     traits      => ['Getopt'],
-    cmd_aliases => 'r',
+    cmd_aliases => 'n',
 );
 
 has 'readable' => (
@@ -55,7 +55,7 @@ has 'readable' => (
     isa         => 'Bool',
     default     => 1,
     traits      => ['Getopt'],
-    cmd_aliases => 'e',
+    cmd_aliases => 'r',
 );
 
 has 'special' => (
@@ -131,7 +131,7 @@ sub _get_chars {
 }
 
 sub generate {
-    my ( $self, $repeat ) = @_;
+    my ( $self, $number ) = @_;
 
     my $length        = $self->length;
     my $verify        = $self->verify;
@@ -151,10 +151,10 @@ You requested $num_of_types types of characters but only have $length length.
 _DIE_MSG
     }
 
-    $repeat ||= $self->repeat;
+    $number ||= $self->number;
 
     # each password iteration needed
-    foreach my $pass_iter ( 1 .. $repeat ) {
+    foreach my $pass_iter ( 1 .. $number ) {
         my $password  = $EMPTY;
         my $char_type = shift @char_types;
 
@@ -183,7 +183,7 @@ _DIE_MSG
         # we need to shuffle the string
         $password = join $EMPTY, shuffle( split //sm, $password );
 
-        $repeat == 1 && return $password;
+        $number == 1 && return $password;
 
         push @passwords, $password;
 
@@ -208,7 +208,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 0.11
+version 1.00
 
 =head1 SYNOPSIS
 
@@ -251,7 +251,7 @@ These are boolean flags which change the way App::Genpass works.
 
 =over 4
 
-=item repeat
+=item number
 
 You can decide how many passwords to create. The default is 1.
 

@@ -28,4 +28,4 @@ requires:
   MooseX::SimpleConfig: 0
   Path::Class: 0
   namespace::autoclean: 0
-version: 0.11
+version: 1.00
