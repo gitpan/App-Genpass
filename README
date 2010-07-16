@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    Version 0.10
+    version 0.11
 
 SYNOPSIS
         use App::Genpass;
@@ -178,12 +178,12 @@ SUPPORT
 
         <http://search.cpan.org/dist/App-Genpass/>
 
-LICENSE AND COPYRIGHT
-    Copyright 2009-2010 Sawyer X.
+AUTHOR
+      Sawyer X <xsawyerx@cpan.org>
 
-    This program is free software; you can redistribute it and/or modify it
-    under the terms of either: the GNU General Public License as published
-    by the Free Software Foundation; or the Artistic License.
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2010 by Sawyer X.
 
-    See http://dev.perl.org/licenses/ for more information.
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
 

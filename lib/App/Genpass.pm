@@ -1,7 +1,13 @@
 package App::Genpass;
+BEGIN {
+  $App::Genpass::VERSION = '0.11';
+}
+# ABSTRACT: Quickly and easily create secure passwords
 
 use Carp;
 use Moose;
+use Path::Class 'file';
+use File::HomeDir;
 use List::AllUtils qw( any none shuffle );
 use namespace::autoclean;
 
@@ -76,9 +82,19 @@ has 'length' => (
     cmd_aliases => 'l',
 );
 
-has '+configfile' => ( default => '/etc/genpass.yaml' );
+has '+configfile' => (
+    isa     => 'Maybe[MooseX::Types::Path::Class::File]',
+    default => sub {
+        my @files = (
+            file( File::HomeDir->my_home, '.genpass.yaml' ),
+            '/etc/genpass.yaml',
+        );
 
-our $VERSION = '0.10';
+        foreach my $file (@files) {
+            -e $file && -r $file and return file($file);
+        }
+    },
+);
 
 sub _get_chars {
     my $self      = shift;
@@ -182,9 +198,9 @@ no Moose;
 
 1;
 
-__END__
 
-=for stopwords boolean DWIM DWYM arrayref perldoc Github CPAN's AnnoCPAN CPAN
+
+=pod
 
 =head1 NAME
 
@@ -192,7 +208,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-Version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
@@ -221,6 +237,7 @@ and easily.
     my @multiple_passwords = $genpass->generate(10); # returns array again
     my $multiple_passwords = $genpass->generate(10); # returns arrayref
 
+=for stopwords boolean DWIM DWYM arrayref perldoc Github CPAN's AnnoCPAN CPAN
 
 =head1 SUBROUTINES/METHODS
 
@@ -378,7 +395,6 @@ You can find documentation for this module with the perldoc command.
 
     perldoc App::Genpass
 
-
 You can also look for information at:
 
 =over 4
@@ -405,13 +421,19 @@ L<http://search.cpan.org/dist/App-Genpass/>
 
 =back
 
-=head1 LICENSE AND COPYRIGHT
+=head1 AUTHOR
 
-Copyright 2009-2010 Sawyer X.
+  Sawyer X <xsawyerx@cpan.org>
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of either: the GNU General Public License as published
-by the Free Software Foundation; or the Artistic License.
+=head1 COPYRIGHT AND LICENSE
 
-See http://dev.perl.org/licenses/ for more information.
+This software is copyright (c) 2010 by Sawyer X.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
+
+__END__
 

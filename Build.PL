@@ -1,29 +1,49 @@
+
 use strict;
 use warnings;
-use Module::Build;
 
-my $builder = Module::Build->new(
-    module_name         => 'App::Genpass',
-    license             => 'perl',
-    dist_author         => q{Sawyer X <xsawyerx@cpan.org>},
-    dist_version_from   => 'lib/App/Genpass.pm',
-    build_requires => {
-        'Test::More'           => 0,
-        'Test::Deep'           => 0,
-        'List::MoreUtils'      => 0,
-    },
-    requires => {
-        'Carp'                 => 0,
-        'Moose'                => 0,
-        'MooseX::Getopt'       => 0.12,
-        'MooseX::SimpleConfig' => 0,
-        'List::AllUtils'       => 0,
-        'namespace::autoclean' => 0,
-    },
-    add_to_cleanup     => [ 'App-Genpass-*' ],
-    create_makefile_pl => 'traditional',
-    create_readme      => 1,
-    create_license     => 1,
+use Module::Build 0.3601;
+
+
+my %module_build_args = (
+  'build_requires' => {
+    'File::Find' => '0',
+    'File::Temp' => '0',
+    'List::MoreUtils' => '0',
+    'Module::Build' => '0.3601',
+    'Test::Deep' => '0',
+    'Test::More' => '0'
+  },
+  'configure_requires' => {
+    'ExtUtils::MakeMaker' => '6.31',
+    'Module::Build' => '0.3601'
+  },
+  'dist_abstract' => 'Quickly and easily create secure passwords',
+  'dist_author' => [
+    'Sawyer X <xsawyerx@cpan.org>'
+  ],
+  'dist_name' => 'App-Genpass',
+  'dist_version' => '0.11',
+  'license' => 'perl',
+  'module_name' => 'App::Genpass',
+  'recommends' => {},
+  'recursive_test_files' => 1,
+  'requires' => {
+    'Carp' => '0',
+    'File::HomeDir' => '0',
+    'List::AllUtils' => '0',
+    'Moose' => '0',
+    'MooseX::Getopt' => '0',
+    'MooseX::SimpleConfig' => '0',
+    'Path::Class' => '0',
+    'namespace::autoclean' => '0'
+  },
+  'script_files' => [
+    'bin/genpass'
+  ]
 );
 
-$builder->create_build_script();
+
+my $build = Module::Build->new(%module_build_args);
+
+$build->create_build_script;
