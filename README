@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 1.00
+    version 1.01
 
 SYNOPSIS
         use App::Genpass;
@@ -63,6 +63,10 @@ SUBROUTINES/METHODS
         numerical, specials, etc.) are present in the password. This makes
         it just a tad slower, but it guarantees the result. Best keep it on.
 
+        To emphesize how "slower" it is: if you create 500 passwords of 500
+        character length, using "verify" off, will make it faster by 0.1
+        seconds.
+
         Default: on.
 
    attributes
@@ -98,7 +102,7 @@ SUBROUTINES/METHODS
         Default: [ '0' .. '9' ] (not including excluded chars).
 
     unreadable
-        All characters which are considered (to me) unreadable. You can
+        All characters which are considered (by me) unreadable. You can
         change this to what you consider unreadable characters. For example:
 
             my $gp = App::Genpass->new( unreadable => [ qw(jlvV) ] );
@@ -107,7 +111,7 @@ SUBROUTINES/METHODS
         removed from all sets.
 
         Thus, unreadable characters override all other sets. You can make
-        unreadable characters not count by using the "readable =&gt; 0"
+        unreadable characters not count by using the "<readable =" 0>>
         option, described by the *readable* flag above.
 
     specials
@@ -126,14 +130,14 @@ SUBROUTINES/METHODS
         my @passwords = $gp->generate(300); # 300 passwords to go
 
     This method tries to be tricky and DWIM (or rather, DWYM). That is, if
-    you request it to generate only one password and use a scalar ("my $p =
-    $gp-&gt;generate(1)"), it will return a single password.
+    you request it to generate only one password and use a scalar ("<my $p =
+    $gp-"generate(1)>>), it will return a single password.
 
-    However, if you try to generate multiple passwords and use a scalar ("my
-    $p = $gp-&gt;generate(30)"), it will return an arrayref for the
+    However, if you try to generate multiple passwords and use a scalar
+    ("<my $p = $gp-"generate(30)>>), it will return an arrayref for the
     passwords.
 
-    Generating passwords with arrays ("my @p = $gp-&gt;generate(...)") will
+    Generating passwords with arrays ("<my @p = $gp-"generate(...)>>) will
     always return an array of the passwords, even if it's a single password.
 
 AUTHOR

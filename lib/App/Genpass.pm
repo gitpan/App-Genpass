@@ -1,6 +1,6 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '1.00';
+  $App::Genpass::VERSION = '1.01';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -93,6 +93,8 @@ has '+configfile' => (
         foreach my $file (@files) {
             -e $file && -r $file and return file($file);
         }
+
+        return;
     },
 );
 
@@ -208,7 +210,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 1.00
+version 1.01
 
 =head1 SYNOPSIS
 
@@ -280,6 +282,9 @@ Verify that every type of character wanted (lowercase, uppercase, numerical,
 specials, etc.) are present in the password. This makes it just a tad slower,
 but it guarantees the result. Best keep it on.
 
+To emphesize how "slower" it is: if you create 500 passwords of 500 character
+length, using C<verify> off, will make it faster by 0.1 seconds.
+
 Default: on.
 
 =back
@@ -330,7 +335,7 @@ Default: [ '0' .. '9' ] (not including excluded chars).
 
 =item unreadable
 
-All characters which are considered (to me) unreadable. You can change this to
+All characters which are considered (by me) unreadable. You can change this to
 what you consider unreadable characters. For example:
 
     my $gp = App::Genpass->new( unreadable => [ qw(jlvV) ] );
@@ -339,7 +344,7 @@ After all the characters are set, unreadable characters will be removed from all
 sets.
 
 Thus, unreadable characters override all other sets. You can make unreadable
-characters not count by using the C<readable =&gt; 0> option, described by the
+characters not count by using the C<<readable => 0>> option, described by the
 I<readable> flag above.
 
 =item specials
@@ -363,12 +368,12 @@ It accepts only one parameter, which is how many passwords to generate.
 
 This method tries to be tricky and DWIM (or rather, DWYM). That is, if you
 request it to generate only one password and use a scalar
-(C<my $p = $gp-&gt;generate(1)>), it will return a single password.
+(C<<my $p = $gp->generate(1)>>), it will return a single password.
 
 However, if you try to generate multiple passwords and use a scalar
-(C<my $p = $gp-&gt;generate(30)>), it will return an arrayref for the passwords.
+(C<<my $p = $gp->generate(30)>>), it will return an arrayref for the passwords.
 
-Generating passwords with arrays (C<my @p = $gp-&gt;generate(...)>) will always
+Generating passwords with arrays (C<<my @p = $gp->generate(...)>>) will always
 return an array of the passwords, even if it's a single password.
 
 =head1 AUTHOR
