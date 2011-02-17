@@ -23,18 +23,19 @@ my %module_build_args = (
     'Sawyer X <xsawyerx@cpan.org>'
   ],
   'dist_name' => 'App-Genpass',
-  'dist_version' => '1.01',
+  'dist_version' => '2.00',
   'license' => 'perl',
   'module_name' => 'App::Genpass',
   'recommends' => {},
   'recursive_test_files' => 1,
   'requires' => {
     'Carp' => '0',
+    'Config::Any' => '0',
     'File::HomeDir' => '0',
     'List::AllUtils' => '0',
-    'Moose' => '0',
-    'MooseX::Getopt' => '0',
-    'MooseX::SimpleConfig' => '0',
+    'Mouse' => '0',
+    'MouseX::ConfigFromFile' => '0',
+    'MouseX::Getopt' => '0',
     'Path::Class' => '0',
     'namespace::autoclean' => '0'
   },

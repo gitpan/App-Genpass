@@ -1,17 +1,21 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '1.01';
+  $App::Genpass::VERSION = '2.00';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
 use Carp;
-use Moose;
+use Mouse;
 use Path::Class 'file';
+use Config::Any;
 use File::HomeDir;
 use List::AllUtils qw( any none shuffle );
 use namespace::autoclean;
 
-with qw/ MooseX::SimpleConfig MooseX::Getopt /;
+with qw/
+    MouseX::ConfigFromFile
+    MouseX::Getopt
+/;
 
 # attributes for password generation
 has 'lowercase' => (
@@ -83,7 +87,7 @@ has 'length' => (
 );
 
 has '+configfile' => (
-    isa     => 'Maybe[MooseX::Types::Path::Class::File]',
+    isa     => 'Maybe[MouseX::Types::Path::Class::File]',
     default => sub {
         my @files = (
             file( File::HomeDir->my_home, '.genpass.yaml' ),
@@ -97,6 +101,41 @@ has '+configfile' => (
         return;
     },
 );
+
+sub get_config_from_file {
+    my ($class, $file) = @_;
+
+    $file = $file->() if ref $file eq 'CODE';
+    my $files_ref = ref $file eq 'ARRAY' ? $file : [$file];
+
+    my $can_config_any_args = $class->can('config_any_args');
+    my $extra_args = $can_config_any_args ?
+        $can_config_any_args->($class, $file) : {};
+    ;
+    my $raw_cfany = Config::Any->load_files({
+        %$extra_args,
+        use_ext         => 1,
+        files           => $files_ref,
+        flatten_to_hash => 1,
+    } );
+
+    my %raw_config;
+    foreach my $file_tested ( reverse @{$files_ref} ) {
+        if ( ! exists $raw_cfany->{$file_tested} ) {
+            warn qq{Specified configfile '$file_tested' does not exist, } .
+                qq{is empty, or is not readable\n};
+                next;
+        }
+
+        my $cfany_hash = $raw_cfany->{$file_tested};
+        die "configfile must represent a hash structure in file: $file_tested"
+            unless $cfany_hash && ref $cfany_hash && ref $cfany_hash eq 'HASH';
+
+        %raw_config = ( %raw_config, %{$cfany_hash} );
+    }
+
+    \%raw_config;
+}
 
 sub _get_chars {
     my $self      = shift;
@@ -196,7 +235,7 @@ _DIE_MSG
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Mouse;
 
 1;
 
@@ -210,7 +249,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 1.01
+version 2.00
 
 =head1 SYNOPSIS
 
@@ -376,15 +415,34 @@ However, if you try to generate multiple passwords and use a scalar
 Generating passwords with arrays (C<<my @p = $gp->generate(...)>>) will always
 return an array of the passwords, even if it's a single password.
 
+=head2 get_config_from_file
+
+Reads the configuration file using L<Config::Any>.
+
+Shamelessly lifted from L<MooseX::SimpleConfig> because there is no
+L<MouseX::SimpleConfig>.
+
 =head1 AUTHOR
 
 Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 DEPENDENCIES
 
-L<Moose>
+L<Mouse>
+
+L<MouseX::Getopt>
+
+L<MouseX::ConfigFromFile>
+
+L<Config::Any>
+
+L<Path::Class>
 
 L<List::AllUtils>
+
+L<File::HomeDir>
+
+L<namespace::autoclean>
 
 =head1 BUGS AND LIMITATIONS
 

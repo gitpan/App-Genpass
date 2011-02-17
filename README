@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 1.01
+    version 2.00
 
 SYNOPSIS
         use App::Genpass;
@@ -140,13 +140,31 @@ SUBROUTINES/METHODS
     Generating passwords with arrays ("<my @p = $gp-"generate(...)>>) will
     always return an array of the passwords, even if it's a single password.
 
+  get_config_from_file
+    Reads the configuration file using Config::Any.
+
+    Shamelessly lifted from MooseX::SimpleConfig because there is no
+    MouseX::SimpleConfig.
+
 AUTHOR
     Sawyer X, "<xsawyerx at cpan.org>"
 
 DEPENDENCIES
-    Moose
+    Mouse
+
+    MouseX::Getopt
+
+    MouseX::ConfigFromFile
+
+    Config::Any
+
+    Path::Class
 
     List::AllUtils
+
+    File::HomeDir
+
+    namespace::autoclean
 
 BUGS AND LIMITATIONS
     Please report any bugs or feature requests to "bug-app-genpass at

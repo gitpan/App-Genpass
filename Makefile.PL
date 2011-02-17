@@ -31,15 +31,16 @@ my %WriteMakefileArgs = (
   'NAME' => 'App::Genpass',
   'PREREQ_PM' => {
     'Carp' => '0',
+    'Config::Any' => '0',
     'File::HomeDir' => '0',
     'List::AllUtils' => '0',
-    'Moose' => '0',
-    'MooseX::Getopt' => '0',
-    'MooseX::SimpleConfig' => '0',
+    'Mouse' => '0',
+    'MouseX::ConfigFromFile' => '0',
+    'MouseX::Getopt' => '0',
     'Path::Class' => '0',
     'namespace::autoclean' => '0'
   },
-  'VERSION' => '1.01',
+  'VERSION' => '2.00',
   'test' => {
     'TESTS' => 't/*.t'
   }
