@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.00
+    version 2.01
 
 SYNOPSIS
         use App::Genpass;

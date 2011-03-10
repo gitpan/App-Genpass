@@ -38,9 +38,10 @@ my %WriteMakefileArgs = (
     'MouseX::ConfigFromFile' => '0',
     'MouseX::Getopt' => '0',
     'Path::Class' => '0',
-    'namespace::autoclean' => '0'
+    'namespace::autoclean' => '0',
+    'namespace::clean' => '0.2'
   },
-  'VERSION' => '2.00',
+  'VERSION' => '2.01',
   'test' => {
     'TESTS' => 't/*.t'
   }

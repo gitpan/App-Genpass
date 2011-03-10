@@ -29,6 +29,7 @@ requires:
   MouseX::Getopt: 0
   Path::Class: 0
   namespace::autoclean: 0
+  namespace::clean: 0.2
 resources:
   repository: http://github.com/xsawyerx/app-genpass
-version: 2.00
+version: 2.01

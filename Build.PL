@@ -23,7 +23,7 @@ my %module_build_args = (
     'Sawyer X <xsawyerx@cpan.org>'
   ],
   'dist_name' => 'App-Genpass',
-  'dist_version' => '2.00',
+  'dist_version' => '2.01',
   'license' => 'perl',
   'module_name' => 'App::Genpass',
   'recommends' => {},
@@ -37,7 +37,8 @@ my %module_build_args = (
     'MouseX::ConfigFromFile' => '0',
     'MouseX::Getopt' => '0',
     'Path::Class' => '0',
-    'namespace::autoclean' => '0'
+    'namespace::autoclean' => '0',
+    'namespace::clean' => '0.2'
   },
   'script_files' => [
     'bin/genpass'
