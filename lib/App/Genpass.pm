@@ -1,6 +1,6 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '2.02';
+  $App::Genpass::VERSION = '2.03';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -65,7 +65,7 @@ has 'readable' => (
 has 'special' => (
     is          => 'ro',
     isa         => 'Bool',
-    default     => 1,
+    default     => 0,
     traits      => ['Getopt'],
     cmd_aliases => 's',
 );
@@ -180,6 +180,10 @@ sub generate {
     my @verifications = ();
     my $EMPTY         = q{};
 
+    if ( $self->special && $self->readable ) {
+        croak 'Cannot have both special and readable characters. Pick one.';
+    }
+
     my ( $char_types, @chars ) = @{ $self->_get_chars };
 
     my @char_types   = @{$char_types};
@@ -249,7 +253,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.02
+version 2.03
 
 =head1 SYNOPSIS
 
@@ -309,11 +313,17 @@ attributes" below.
 
 Default: on.
 
+This conflicts with special characters so be sure to disable it if you want
+special characters to be used.
+
 =item special
 
 Include special characters: "!", "@", "#", "$", "%", "^", "&", "*", "(", ")"
 
-Default: on.
+Default: off.
+
+This conflicts with readable characters so be sure to disable them if you want
+special characters to be used.
 
 =item verify
 
@@ -321,7 +331,7 @@ Verify that every type of character wanted (lowercase, uppercase, numerical,
 specials, etc.) are present in the password. This makes it just a tad slower,
 but it guarantees the result. Best keep it on.
 
-To emphesize how "slower" it is: if you create 500 passwords of 500 character
+To emphasize how "slower" it is: if you create 500 passwords of 500 character
 length, using C<verify> off, will make it faster by 0.1 seconds.
 
 Default: on.

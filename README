@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.02
+    version 2.03
 
 SYNOPSIS
         use App::Genpass;
@@ -52,18 +52,24 @@ SUBROUTINES/METHODS
 
         Default: on.
 
+        This conflicts with special characters so be sure to disable it if
+        you want special characters to be used.
+
     special
         Include special characters: "!", "@", "#", "$", "%", "^", "&", "*",
         "(", ")"
 
-        Default: on.
+        Default: off.
+
+        This conflicts with readable characters so be sure to disable them
+        if you want special characters to be used.
 
     verify
         Verify that every type of character wanted (lowercase, uppercase,
         numerical, specials, etc.) are present in the password. This makes
         it just a tad slower, but it guarantees the result. Best keep it on.
 
-        To emphesize how "slower" it is: if you create 500 passwords of 500
+        To emphasize how "slower" it is: if you create 500 passwords of 500
         character length, using "verify" off, will make it faster by 0.1
         seconds.
 
