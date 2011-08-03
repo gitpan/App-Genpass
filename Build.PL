@@ -15,7 +15,7 @@ my %module_build_args = (
     'Test::More' => '0'
   },
   'configure_requires' => {
-    'ExtUtils::MakeMaker' => '6.31',
+    'ExtUtils::MakeMaker' => '6.30',
     'Module::Build' => '0.3601'
   },
   'dist_abstract' => 'Quickly and easily create secure passwords',
@@ -23,7 +23,7 @@ my %module_build_args = (
     'Sawyer X <xsawyerx@cpan.org>'
   ],
   'dist_name' => 'App-Genpass',
-  'dist_version' => '2.01',
+  'dist_version' => '2.02',
   'license' => 'perl',
   'module_name' => 'App::Genpass',
   'recommends' => {},

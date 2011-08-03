@@ -1,6 +1,6 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '2.01';
+  $App::Genpass::VERSION = '2.02';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -249,7 +249,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.01
+version 2.02
 
 =head1 SYNOPSIS
 
@@ -400,20 +400,24 @@ Default: [ '!', '@', '#', '$', '%', '^', '&', '*', '(', ')' ].
 
 This method generates the password or passwords.
 
-It accepts only one parameter, which is how many passwords to generate.
+It accepts an optional parameter indicating how many passwords to generate.
 
     $gp = App::Genpass->new();
     my @passwords = $gp->generate(300); # 300 passwords to go
 
+If you do not provide a parameter, it will use the default number of passwords
+to generate, defined by the attribute B<number> explained above.
+
 This method tries to be tricky and DWIM (or rather, DWYM). That is, if you
-request it to generate only one password and use a scalar
+request it to generate only one password and use scalar context
 (C<<my $p = $gp->generate(1)>>), it will return a single password.
 
-However, if you try to generate multiple passwords and use a scalar
-(C<<my $p = $gp->generate(30)>>), it will return an arrayref for the passwords.
+However, if you try to generate multiple passwords and use scalar context
+(C<<my $p = $gp->generate(30)>>), it will return an array reference for the
+passwords.
 
-Generating passwords with arrays (C<<my @p = $gp->generate(...)>>) will always
-return an array of the passwords, even if it's a single password.
+Generating passwords with list context (C<<my @p = $gp->generate(...)>>) will
+always return a list of the passwords, even if it's a single password.
 
 =head2 get_config_from_file
 
