@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.03
+    version 2.04
 
 SYNOPSIS
         use App::Genpass;
@@ -19,7 +19,7 @@ DESCRIPTION
     special characters, minimum length, etc.), you know it can become a
     pretty pesky task.
 
-    This script makes it possible to create flexible and secure passwords,
+    This module makes it possible to create flexible and secure passwords,
     quickly and easily.
 
         use App::Genpass;
@@ -29,6 +29,10 @@ DESCRIPTION
         my @single_password    = $genpass->generate(1);  # returns array
         my @multiple_passwords = $genpass->generate(10); # returns array again
         my $multiple_passwords = $genpass->generate(10); # returns arrayref
+
+    This distribution includes a program called genpass, which is a command
+    line interface to this module. If you need a program that generates
+    passwords, use genpass.
 
 SUBROUTINES/METHODS
   new
