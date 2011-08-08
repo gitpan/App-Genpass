@@ -1,6 +1,6 @@
 package App::Genpass;
 BEGIN {
-  $App::Genpass::VERSION = '2.04';
+  $App::Genpass::VERSION = '2.10';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -60,14 +60,6 @@ has 'readable' => (
     default     => 1,
     traits      => ['Getopt'],
     cmd_aliases => 'r',
-);
-
-has 'special' => (
-    is          => 'ro',
-    isa         => 'Bool',
-    default     => 0,
-    traits      => ['Getopt'],
-    cmd_aliases => 's',
 );
 
 has 'verify' => (
@@ -180,10 +172,6 @@ sub generate {
     my @verifications = ();
     my $EMPTY         = q{};
 
-    if ( $self->special && $self->readable ) {
-        croak 'Cannot have both special and readable characters. Pick one.';
-    }
-
     my ( $char_types, @chars ) = @{ $self->_get_chars };
 
     my @char_types   = @{$char_types};
@@ -253,7 +241,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.04
+version 2.10
 
 =head1 SYNOPSIS
 
@@ -271,7 +259,7 @@ If you've ever needed to create 10 (or even 10,000) passwords on the fly with
 varying preferences (lowercase, uppercase, no confusing characters, special
 characters, minimum length, etc.), you know it can become a pretty pesky task.
 
-This module makes it possible to create flexible and secure passwords, quickly
+This script makes it possible to create flexible and secure passwords, quickly
 and easily.
 
     use App::Genpass;
@@ -281,10 +269,6 @@ and easily.
     my @single_password    = $genpass->generate(1);  # returns array
     my @multiple_passwords = $genpass->generate(10); # returns array again
     my $multiple_passwords = $genpass->generate(10); # returns arrayref
-
-This distribution includes a program called B<genpass>, which is a command line
-interface to this module. If you need a program that generates passwords, use
-B<genpass>.
 
 =for stopwords boolean DWIM DWYM arrayref perldoc Github CPAN's AnnoCPAN CPAN
 
@@ -310,24 +294,12 @@ specific case only generate 2, if that's what you want.
 =item readable
 
 Use only readable characters, excluding confusing characters: "o", "O", "0",
-"l", "1", "I".
+"l", "1", "I", and special characters such as '#', '!', '%' and other symbols.
 
 You can overwrite what characters are considered unreadable under "character
 attributes" below.
 
 Default: on.
-
-This conflicts with special characters so be sure to disable it if you want
-special characters to be used.
-
-=item special
-
-Include special characters: "!", "@", "#", "$", "%", "^", "&", "*", "(", ")"
-
-Default: off.
-
-This conflicts with readable characters so be sure to disable them if you want
-special characters to be used.
 
 =item verify
 

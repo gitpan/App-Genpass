@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.04
+    version 2.10
 
 SYNOPSIS
         use App::Genpass;
@@ -19,7 +19,7 @@ DESCRIPTION
     special characters, minimum length, etc.), you know it can become a
     pretty pesky task.
 
-    This module makes it possible to create flexible and secure passwords,
+    This script makes it possible to create flexible and secure passwords,
     quickly and easily.
 
         use App::Genpass;
@@ -29,10 +29,6 @@ DESCRIPTION
         my @single_password    = $genpass->generate(1);  # returns array
         my @multiple_passwords = $genpass->generate(10); # returns array again
         my $multiple_passwords = $genpass->generate(10); # returns arrayref
-
-    This distribution includes a program called genpass, which is a command
-    line interface to this module. If you need a program that generates
-    passwords, use genpass.
 
 SUBROUTINES/METHODS
   new
@@ -49,24 +45,13 @@ SUBROUTINES/METHODS
 
     readable
         Use only readable characters, excluding confusing characters: "o",
-        "O", "0", "l", "1", "I".
+        "O", "0", "l", "1", "I", and special characters such as '#', '!',
+        '%' and other symbols.
 
         You can overwrite what characters are considered unreadable under
         "character attributes" below.
 
         Default: on.
-
-        This conflicts with special characters so be sure to disable it if
-        you want special characters to be used.
-
-    special
-        Include special characters: "!", "@", "#", "$", "%", "^", "&", "*",
-        "(", ")"
-
-        Default: off.
-
-        This conflicts with readable characters so be sure to disable them
-        if you want special characters to be used.
 
     verify
         Verify that every type of character wanted (lowercase, uppercase,

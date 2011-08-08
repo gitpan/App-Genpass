@@ -16,18 +16,7 @@ print map { "$_\n" } @passwords;
 
 exit 0;
 
-
-
-=pod
-
-=head1 NAME
-
-genpass - Quickly and easily create secure passwords
-
-=head1 VERSION
-
-version 2.04
-
+__END__
 =head1 SYNOPSIS
 
 genpass [-rlnsv] [long options...]
@@ -156,7 +145,7 @@ such as period, exclamation mark, percentage sign, etc.
 
 You can negate this flag by doing:
 
-    genpass --nospecial
+    genpass --nospecials
 
 Default: no.
 
@@ -212,18 +201,3 @@ sequences are stripped of such characters.
     # create 5 new passwords of length of 30, long options
     genpass --number 5 --length 30
 
-=head1 AUTHOR
-
-  Sawyer X <xsawyerx@cpan.org>
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2010 by Sawyer X.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
-
-=cut
-
-
-__END__
