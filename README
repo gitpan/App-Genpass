@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.10
+    version 2.20
 
 SYNOPSIS
         use App::Genpass;
@@ -65,10 +65,19 @@ SUBROUTINES/METHODS
         Default: on.
 
    attributes
-    length
-        How long will the passwords be.
+    minlength
+        The minimum length of password to generate.
+
+        Default: 8.
+
+    maxlength
+        The maximum length of password to generate.
 
         Default: 10.
+
+    length
+        Use this if you want to explicitly specify the length of password to
+        generate.
 
    character attributes
     These are the attributes that control the types of characters. One can
@@ -201,10 +210,10 @@ SUPPORT
         <http://search.cpan.org/dist/App-Genpass/>
 
 AUTHOR
-      Sawyer X <xsawyerx@cpan.org>
+    Sawyer X <xsawyerx@cpan.org>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2010 by Sawyer X.
+    This software is copyright (c) 2011 by Sawyer X.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

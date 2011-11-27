@@ -9,41 +9,43 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'Quickly and easily create secure passwords',
-  'AUTHOR' => 'Sawyer X <xsawyerx@cpan.org>',
-  'BUILD_REQUIRES' => {
-    'File::Find' => '0',
-    'File::Temp' => '0',
-    'List::MoreUtils' => '0',
-    'Module::Build' => '0.3601',
-    'Test::Deep' => '0',
-    'Test::More' => '0'
+  "ABSTRACT" => "Quickly and easily create secure passwords",
+  "AUTHOR" => "Sawyer X <xsawyerx\@cpan.org>",
+  "BUILD_REQUIRES" => {
+    "File::Find" => 0,
+    "File::Temp" => 0,
+    "List::MoreUtils" => 0,
+    "Module::Build" => "0.3601",
+    "Test::Deep" => 0,
+    "Test::More" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30',
-    'Module::Build' => '0.3601'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30",
+    "Module::Build" => "0.3601"
   },
-  'DISTNAME' => 'App-Genpass',
-  'EXE_FILES' => [
-    'bin/genpass'
+  "DISTNAME" => "App-Genpass",
+  "EXE_FILES" => [
+    "bin/genpass"
   ],
-  'LICENSE' => 'perl',
-  'NAME' => 'App::Genpass',
-  'PREREQ_PM' => {
-    'Carp' => '0',
-    'Config::Any' => '0',
-    'File::HomeDir' => '0',
-    'List::AllUtils' => '0',
-    'Mouse' => '0',
-    'MouseX::ConfigFromFile' => '0',
-    'MouseX::Getopt' => '0',
-    'Path::Class' => '0',
-    'namespace::autoclean' => '0',
-    'namespace::clean' => '0.2'
+  "LICENSE" => "perl",
+  "NAME" => "App::Genpass",
+  "PREREQ_PM" => {
+    "Carp" => 0,
+    "Config::Any" => 0,
+    "File::HomeDir" => 0,
+    "List::AllUtils" => 0,
+    "Mouse" => 0,
+    "MouseX::ConfigFromFile" => 0,
+    "MouseX::Getopt" => 0,
+    "Path::Class" => 0,
+    "namespace::autoclean" => 0,
+    "namespace::clean" => "0.2",
+    "strict" => 0,
+    "warnings" => 0
   },
-  'VERSION' => '2.10',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "2.20",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 

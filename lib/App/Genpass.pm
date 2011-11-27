@@ -1,6 +1,6 @@
 package App::Genpass;
-BEGIN {
-  $App::Genpass::VERSION = '2.10';
+{
+  $App::Genpass::VERSION = '2.20';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -73,9 +73,24 @@ has 'verify' => (
 has 'length' => (
     is          => 'ro',
     isa         => 'Int',
-    default     => 10,
     traits      => ['Getopt'],
     cmd_aliases => 'l',
+);
+
+has 'minlength' => (
+    is          => 'rw',
+    isa         => 'Int',
+    default     => 8,
+    traits      => ['Getopt'],
+    cmd_aliases => 'm',
+);
+
+has 'maxlength' => (
+    is          => 'rw',
+    isa         => 'Int',
+    default     => 10,
+    traits      => ['Getopt'],
+    cmd_aliases => 'x',
 );
 
 has '+configfile' => (
@@ -166,7 +181,7 @@ sub _get_chars {
 sub generate {
     my ( $self, $number ) = @_;
 
-    my $length        = $self->length;
+    my $length;
     my $verify        = $self->verify;
     my @passwords     = ();
     my @verifications = ();
@@ -177,12 +192,24 @@ sub generate {
     my @char_types   = @{$char_types};
     my $num_of_types = scalar @char_types;
 
-    if ( $num_of_types > $length ) {
+    if ( (defined($self->length) && $num_of_types > $self->length)
+         || ($num_of_types > $self->minlength) ) {
+        $length = defined($self->length) ? $self->length : $self->minlength.' minimum';
         croak <<"_DIE_MSG";
-You wanted a longer password that the variety of characters you've selected.
+You wanted a shorter password that the variety of characters you've selected.
 You requested $num_of_types types of characters but only have $length length.
 _DIE_MSG
     }
+
+    if ($self->minlength > $self->maxlength) {
+        carp "minlength > maxlength, so I'm switching them";
+        my $min = $self->maxlength;
+        $self->maxlength($self->minlength);
+        $self->minlength($min);
+    }
+
+    $length = $self->length
+            || $self->minlength + int(rand(abs($self->maxlength - $self->minlength) + 1));
 
     $number ||= $self->number;
 
@@ -241,7 +268,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.10
+version 2.20
 
 =head1 SYNOPSIS
 
@@ -318,11 +345,21 @@ Default: on.
 
 =over 4
 
-=item length
+=item minlength
 
-How long will the passwords be.
+The minimum length of password to generate.
+
+Default: 8.
+
+=item maxlength
+
+The maximum length of password to generate.
 
 Default: 10.
+
+=item length
+
+Use this if you want to explicitly specify the length of password to generate.
 
 =back
 
@@ -476,11 +513,11 @@ L<http://search.cpan.org/dist/App-Genpass/>
 
 =head1 AUTHOR
 
-  Sawyer X <xsawyerx@cpan.org>
+Sawyer X <xsawyerx@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Sawyer X.
+This software is copyright (c) 2011 by Sawyer X.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

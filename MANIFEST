@@ -13,6 +13,7 @@ t/00-load.t
 t/01-_get_chars.t
 t/02-basic_generate.t
 t/03-generate_chars.t
+t/04-variable_length.t
 t/pod-coverage.t
 t/pod.t
 t/release-pod-coverage.t
