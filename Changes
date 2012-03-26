@@ -1,5 +1,8 @@
 Revision history for App-Genpass
 
+2.30    26.03.12
+        - Move from Mouse to Moo - MUCH FASTER!
+
 2.20    27.11.11
         - Add minlength and maxlength (Neil Bowers).
         - Correct warning (Neil Bowers).
@@ -9,6 +12,12 @@ Revision history for App-Genpass
         or readable => 0 will negate special. Readable will exclude special
         characters.
         (Tim Heaney - oylenshpeegul)
+
+2.04    06.08.11
+        - Clarify the distribution contains an application as well.
+        (Neil Bowers).
+        - POD fix.
+        (Tim Heaney)
 
 2.03    03.08.11
         (this release, as the previous, are due to Neil Bowers, so thanks!)

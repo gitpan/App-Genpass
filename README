@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.20
+    version 2.30
 
 SYNOPSIS
         use App::Genpass;
@@ -19,7 +19,7 @@ DESCRIPTION
     special characters, minimum length, etc.), you know it can become a
     pretty pesky task.
 
-    This script makes it possible to create flexible and secure passwords,
+    This module makes it possible to create flexible and secure passwords,
     quickly and easily.
 
         use App::Genpass;
@@ -30,9 +30,26 @@ DESCRIPTION
         my @multiple_passwords = $genpass->generate(10); # returns array again
         my $multiple_passwords = $genpass->generate(10); # returns arrayref
 
+    This distribution includes a program called genpass, which is a command
+    line interface to this module. If you need a program that generates
+    passwords, use genpass.
+
 SUBROUTINES/METHODS
   new
     Creates a new instance. It gets a lot of options.
+
+  new_with_options
+    Creates a new instance while reading the command line parameters.
+
+  parse_opts
+    Parses the command line options.
+
+  configfile
+    An attribute with a default value of a subroutine that tries to find the
+    configuration file. It checks for a ".genpass.yaml" in your home
+    directory (using File::HomeDir), and then for "/etc/genpass.yaml".
+
+    If one is available, that's what it uses. Otherwise nothing.
 
    flags
     These are boolean flags which change the way App::Genpass works.

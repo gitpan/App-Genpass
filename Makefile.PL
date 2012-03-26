@@ -33,17 +33,16 @@ my %WriteMakefileArgs = (
     "Carp" => 0,
     "Config::Any" => 0,
     "File::HomeDir" => 0,
+    "File::Spec" => 0,
+    "Getopt::Long" => 0,
     "List::AllUtils" => 0,
-    "Mouse" => 0,
-    "MouseX::ConfigFromFile" => 0,
-    "MouseX::Getopt" => 0,
-    "Path::Class" => 0,
-    "namespace::autoclean" => 0,
+    "Moo" => 0,
+    "MooX::Types::MooseLike::Base" => 0,
     "namespace::clean" => "0.2",
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "2.20",
+  "VERSION" => "2.30",
   "test" => {
     "TESTS" => "t/*.t"
   }
