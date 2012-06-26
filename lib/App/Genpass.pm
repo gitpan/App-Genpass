@@ -1,6 +1,6 @@
 package App::Genpass;
 {
-  $App::Genpass::VERSION = '2.30';
+  $App::Genpass::VERSION = '2.31';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -45,7 +45,7 @@ has specials => (
 
 has number => (
     is      => 'ro',
-    isa     => Bool,
+    isa     => Int,
     default => sub {1},
 );
 
@@ -287,7 +287,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.30
+version 2.31
 
 =head1 SYNOPSIS
 

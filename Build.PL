@@ -23,7 +23,7 @@ my %module_build_args = (
     "Sawyer X <xsawyerx\@cpan.org>"
   ],
   "dist_name" => "App-Genpass",
-  "dist_version" => "2.30",
+  "dist_version" => "2.31",
   "license" => "perl",
   "module_name" => "App::Genpass",
   "recommends" => {},
