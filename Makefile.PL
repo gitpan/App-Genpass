@@ -37,12 +37,12 @@ my %WriteMakefileArgs = (
     "Getopt::Long" => 0,
     "List::AllUtils" => 0,
     "Moo" => 0,
-    "MooX::Types::MooseLike::Base" => 0,
+    "MooX::Types::MooseLike" => 0,
     "namespace::clean" => "0.2",
     "strict" => 0,
     "warnings" => 0
   },
-  "VERSION" => "2.31",
+  "VERSION" => "2.32",
   "test" => {
     "TESTS" => "t/*.t"
   }

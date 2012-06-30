@@ -23,7 +23,7 @@ my %module_build_args = (
     "Sawyer X <xsawyerx\@cpan.org>"
   ],
   "dist_name" => "App-Genpass",
-  "dist_version" => "2.31",
+  "dist_version" => "2.32",
   "license" => "perl",
   "module_name" => "App::Genpass",
   "recommends" => {},
@@ -36,7 +36,7 @@ my %module_build_args = (
     "Getopt::Long" => 0,
     "List::AllUtils" => 0,
     "Moo" => 0,
-    "MooX::Types::MooseLike::Base" => 0,
+    "MooX::Types::MooseLike" => 0,
     "namespace::clean" => "0.2",
     "strict" => 0,
     "warnings" => 0
