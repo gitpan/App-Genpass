@@ -1,6 +1,6 @@
 package App::Genpass;
 {
-  $App::Genpass::VERSION = '2.32';
+  $App::Genpass::VERSION = '2.33';
 }
 # ABSTRACT: Quickly and easily create secure passwords
 
@@ -78,29 +78,12 @@ has maxlength => (
     default => sub {10},
 );
 
-has configfile => (
-    is      => 'ro',
-    isa     => Str,
-    default => sub {
-        # find configfile location
-        my @files = (
-            File::Spec->catfile( File::HomeDir->my_home, '.genpass.yaml' ),
-            '/etc/genpass.yaml',
-        );
-
-        foreach my $file (@files) {
-            if ( -e $file && -r $file ) {
-                return $file;
-            }
-        }
-    },
-);
-
 sub parse_opts {
     my $class = shift;
     my %opts  = ();
 
     GetOptions(
+        'configfile=s'  => \$opts{'configfile'},
         'lowercase=s@'  => \$opts{'lowercase'},
         'uppercase=s@'  => \$opts{'uppercase'},
         'numerical=i@'  => \$opts{'numerical'},
@@ -112,7 +95,7 @@ sub parse_opts {
         'l|length=i'    => \$opts{'length'},
         'm|minlength=i' => \$opts{'minlength'},
         'x|maxlength=i' => \$opts{'maxlength'},
-    ) or croak 'Can\'t get options.';
+    ) or croak q{Can't get options.};
 
     # remove undefined keys
     foreach my $key ( keys %opts ) {
@@ -123,9 +106,30 @@ sub parse_opts {
 }
 
 sub new_with_options {
-    my $class = shift;
-    my %opts  = $class->parse_opts;
-    my $self  = $class->new( %opts, @_ );
+    my $class   = shift;
+    my %opts    = $class->parse_opts;
+    my @configs = (
+        File::Spec->catfile( File::HomeDir->my_home, '.genpass.yaml' ),
+        '/etc/genpass.yaml',
+    );
+
+    if ( ! exists $opts{'configfile'} ) {
+        foreach my $file (@configs) {
+            if ( -e $file && -r $file ) {
+                $opts{'configfile'} = $file;
+                last;
+            }
+        }
+    }
+
+    if ( exists $opts{'configfile'} ) {
+        %opts = (
+            %opts,
+            %{ $class->get_config_from_file( $opts{'configfile'} ) },
+        );
+    }
+
+    my $self = $class->new( %opts, @_ );
 
     return $self;
 }
@@ -287,7 +291,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.32
+version 2.33
 
 =head1 SYNOPSIS
 
@@ -338,11 +342,13 @@ Parses the command line options.
 
 =head2 configfile
 
-An attribute with a default value of a subroutine that tries to find the
-configuration file. It checks for a C<.genpass.yaml> in your home directory
-(using L<File::HomeDir>), and then for C</etc/genpass.yaml>.
+An attribute defining the configuration file that will be used. If one is not
+provided, it tries to find one on its own. It checks for a C<.genpass.yaml> in
+your home directory (using L<File::HomeDir>), and then for C</etc/genpass.yaml>.
 
 If one is available, that's what it uses. Otherwise nothing.
+
+You must use the C<new_with_options> method described above for this.
 
 =head3 flags
 
@@ -485,20 +491,13 @@ always return a list of the passwords, even if it's a single password.
 
 Reads the configuration file using L<Config::Any>.
 
-Shamelessly lifted from L<MooseX::SimpleConfig> because there is no
-L<MouseX::SimpleConfig>.
+Shamelessly lifted from L<MooseX::SimpleConfig>.
 
 =head1 AUTHOR
 
 Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 DEPENDENCIES
-
-L<Mouse>
-
-L<MouseX::Getopt>
-
-L<MouseX::ConfigFromFile>
 
 L<Config::Any>
 

@@ -13,7 +13,7 @@ configure_requires:
   ExtUtils::MakeMaker: 6.30
   Module::Build: 0.3601
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300013, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 4.300020, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -32,5 +32,5 @@ requires:
   strict: 0
   warnings: 0
 resources:
-  repository: git://github.com/xsawyerx/app-genpass
-version: 2.32
+  repository: git://github.com/xsawyerx/app-genpass.git
+version: 2.33

@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.32
+    version 2.33
 
 SYNOPSIS
         use App::Genpass;
@@ -45,11 +45,14 @@ SUBROUTINES/METHODS
     Parses the command line options.
 
   configfile
-    An attribute with a default value of a subroutine that tries to find the
-    configuration file. It checks for a ".genpass.yaml" in your home
-    directory (using File::HomeDir), and then for "/etc/genpass.yaml".
+    An attribute defining the configuration file that will be used. If one
+    is not provided, it tries to find one on its own. It checks for a
+    ".genpass.yaml" in your home directory (using File::HomeDir), and then
+    for "/etc/genpass.yaml".
 
     If one is available, that's what it uses. Otherwise nothing.
+
+    You must use the "new_with_options" method described above for this.
 
    flags
     These are boolean flags which change the way App::Genpass works.
@@ -169,19 +172,12 @@ SUBROUTINES/METHODS
   get_config_from_file
     Reads the configuration file using Config::Any.
 
-    Shamelessly lifted from MooseX::SimpleConfig because there is no
-    MouseX::SimpleConfig.
+    Shamelessly lifted from MooseX::SimpleConfig.
 
 AUTHOR
     Sawyer X, "<xsawyerx at cpan.org>"
 
 DEPENDENCIES
-    Mouse
-
-    MouseX::Getopt
-
-    MouseX::ConfigFromFile
-
     Config::Any
 
     Path::Class
