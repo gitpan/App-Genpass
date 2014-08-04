@@ -1,11 +1,9 @@
 package App::Genpass;
-{
-  $App::Genpass::VERSION = '2.33';
-}
 # ABSTRACT: Quickly and easily create secure passwords
-
+$App::Genpass::VERSION = '2.34';
 use Carp;
 use Moo;
+use Sub::Quote 'quote_sub';
 use MooX::Types::MooseLike::Base qw/Int Str Bool ArrayRef/;
 use Getopt::Long qw/:config no_ignore_case/;
 use File::Spec;
@@ -16,49 +14,49 @@ use List::AllUtils qw( any none shuffle );
 has uppercase => (
     is      => 'ro',
     isa     => ArrayRef,
-    default => sub { [ 'A' .. 'Z' ] },
+    default => quote_sub( q{ [ 'A' .. 'Z' ] } ),
 );
 
 has lowercase => (
     is      => 'ro',
     isa     => ArrayRef,
-    default => sub { [ 'a' .. 'z' ] },
+    default => quote_sub( q{ [ 'a' .. 'z' ] } ),
 );
 
 has numerical => (
     is      => 'ro',
     isa     => ArrayRef,
-    default => sub { [ '0' .. '9' ] },
+    default => quote_sub( q{ [ '0' .. '9' ] } ),
 );
 
 has unreadable => (
     is      => 'ro',
     isa     => ArrayRef,
-    default => sub { [ split //sm, q{oO0l1I} ] },
+    default => quote_sub( q{ [ split //sm, q{oO0l1I} ] } ),
 );
 
 has specials => (
     is      => 'ro',
     isa     => ArrayRef,
-    default => sub { [ split //sm, q{!@#$%^&*()} ] },
+    default => quote_sub( q{ [ split //sm, q{!@#$%^&*()} ] } ),
 );
 
 has number => (
     is      => 'ro',
     isa     => Int,
-    default => sub {1},
+    default => quote_sub( q{1} ),
 );
 
 has readable => (
     is      => 'ro',
     isa     => Bool,
-    default => sub {1},
+    default => quote_sub( q{1} ),
 );
 
 has verify => (
     is      => 'ro',
     isa     => Bool,
-    default => sub {1},
+    default => quote_sub( q{1} ),
 );
 
 has length => (
@@ -69,13 +67,13 @@ has length => (
 has minlength => (
     is      => 'rw',
     isa     => Int,
-    default => sub {8},
+    default => quote_sub( q{8} ),
 );
 
 has maxlength => (
     is      => 'rw',
     isa     => Int,
-    default => sub {10},
+    default => quote_sub( q{10} ),
 );
 
 sub parse_opts {
@@ -250,10 +248,12 @@ _DIE_MSG
             # for verifying, we just check that it has small capital letters
             # if that doesn't work, we keep asking it to get a new random one
             # the check if it has large capital letters and so on
-            if ( $verify && $char_type ) {
+            if ( $verify && $char_type && @{ $self->$char_type } ) {
                 # verify $char_type
-                while ( ! any { $_ eq $char } @{ $self->$char_type } ) {
-                    $char = $chars[ int rand @chars ];
+                if ( @{ $self->$char_type } ) {
+                    while ( ! any { $_ eq $char } @{ $self->$char_type } ) {
+                        $char = $chars[ int rand @chars ];
+                    }
                 }
 
                 $char_type =
@@ -281,7 +281,7 @@ _DIE_MSG
 
 1;
 
-
+__END__
 
 =pod
 
@@ -291,7 +291,7 @@ App::Genpass - Quickly and easily create secure passwords
 
 =head1 VERSION
 
-version 2.33
+version 2.34
 
 =head1 SYNOPSIS
 
@@ -499,15 +499,21 @@ Sawyer X, C<< <xsawyerx at cpan.org> >>
 
 =head1 DEPENDENCIES
 
+L<Carp>
+
+L<Moo>
+
+L<MooX::Types::MooseLike>
+
+L<Getopt::Long>
+
+L<File::Spec>
+
 L<Config::Any>
-
-L<Path::Class>
-
-L<List::AllUtils>
 
 L<File::HomeDir>
 
-L<namespace::autoclean>
+L<List::AllUtils>
 
 =head1 BUGS AND LIMITATIONS
 
@@ -561,7 +567,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

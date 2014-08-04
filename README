@@ -2,7 +2,7 @@ NAME
     App::Genpass - Quickly and easily create secure passwords
 
 VERSION
-    version 2.33
+    version 2.34
 
 SYNOPSIS
         use App::Genpass;
@@ -178,15 +178,21 @@ AUTHOR
     Sawyer X, "<xsawyerx at cpan.org>"
 
 DEPENDENCIES
+    Carp
+
+    Moo
+
+    MooX::Types::MooseLike
+
+    Getopt::Long
+
+    File::Spec
+
     Config::Any
-
-    Path::Class
-
-    List::AllUtils
 
     File::HomeDir
 
-    namespace::autoclean
+    List::AllUtils
 
 BUGS AND LIMITATIONS
     Please report any bugs or feature requests to "bug-app-genpass at
